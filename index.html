@@ -8,7 +8,7 @@
     <style>
         @font-face {
             font-family: 'GE SS Two Bold';
-            src: url('/EidCard/fonts/GE_SS_Two_Bold.otf') format('truetype');
+            src: url('/EidCard/fonts/GE-SS-Two-Bold.otf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -88,9 +88,34 @@
         }
 
         .checkbox-container {
+            display: flex;
             margin: 15px auto;
             text-align: center;
-            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* تحميل CSS مؤثر التحميل */
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #C79C76;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 1s linear infinite;
+            margin: 15px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -98,7 +123,7 @@
 <body>
     <div class="header-logos">
         <img class="logo" src="/EidCard/media/شعار فالك مفرغ 2@2x-8.PNG" alt="logo1">
-        <!-- يمكنك وضع شعار ثاني هنا اذا تحتاجه -->
+        <!-- يمكنك إضافة شعار آخر هنا -->
     </div>
 
     <div id="card">
@@ -108,12 +133,23 @@
     <input type="text" id="inputName" placeholder="أدخل اسمك هنا">
 
     <div class="checkbox-container">
-        <input type="checkbox" id="showLogo" checked>
-        <label for="showLogo">عرض شعار الشركة على التصميم</label>
+        <div>
+            <input type="checkbox" id="showLogo" checked>
+        </div>
+        <div>
+            <label for="showLogo">عرض شعار الشركة على التصميم</label>
+        </div>
+        
     </div>
+
+    <div class="loader" id="loader"></div>
 
     <button onclick="generateCard()">عرض البطاقة</button>
     <button onclick="downloadCard()">تحميل البطاقة</button>
+
+    <div class="footer">
+        تم تصميم وبرمجة الموقع بواسطة (عبدالله السلوم)
+    </div>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
@@ -121,6 +157,8 @@
         function generateCard() {
             let name = document.getElementById("inputName").value;
             let showLogo = document.getElementById("showLogo").checked;
+            let loader = document.getElementById("loader");
+            let card = document.getElementById("card");
 
             if (name.trim() === "") {
                 alert("من فضلك أدخل اسمك قبل عرض البطاقة!");
@@ -128,16 +166,24 @@
             }
 
             document.getElementById("name").innerText = name;
+            card.style.display = "none";
+            loader.style.display = "block";
 
-            //تغيير الخلفية حسب الاختيار
-            let card = document.getElementById("card");
-            if (showLogo) {
-                card.style.backgroundImage = "url('/EidCard/media/moayda.png')";  // تصميم مع شعارك
-            } else {
-                card.style.backgroundImage = "url('/EidCard/media/moaydanologo.png')";  // تصميم بدون شعار
+            let backgroundImageUrl = showLogo ? '/EidCard/media/moayda.png' : '/EidCard/media/moaydanologo.png';
+            // تحميل الصورة أولا قبل الاظهار
+            let tempImage = new Image();
+            tempImage.src = backgroundImageUrl;
+
+            tempImage.onload = function() {
+                card.style.backgroundImage = `url('${backgroundImageUrl}')`;
+                loader.style.display = "none";
+                card.style.display = "flex";
+            };
+
+            tempImage.onerror = function(){
+                loader.style.display = "none";
+                alert("حدث خطأ في تحميل الصورة! تأكد من المسار.");
             }
-
-            card.style.display = "flex";
         }
 
         function downloadCard() {
