@@ -22,12 +22,12 @@
             padding: 10px;
         }
 
-        #card {
-            width: 100% !important;
-            height: 710px !important;
+       #card {
+            width: 720px !important;
+            height: 1280.1259843px !important;
             margin: 10px auto;
             position: relative;
-            background-image: url('/EidCard/media/moayda.png');
+            background-image: url('/media/moayda.png');
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -38,6 +38,14 @@
             border: 1px solid gray;
             flex-direction: column;
             /* لتنسيق أفضل للنصوص */
+        }
+
+        @media (max-width: 768px) {
+            #card {
+                width: 360px !important;
+                height: 640px !important;
+            }
+            
         }
 
         #name {
