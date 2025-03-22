@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بطاقة معايدة</title>
     <style>
-        /* تعريف الخط */
         @font-face {
             font-family: 'GE SS Two Bold';
-            src: url('/EidCard/fonts/GE_SS_Two_Bold.ttf') format('truetype');
+            src: url('/EidCard/fonts/GE_SS_Two_Bold.otf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -28,36 +27,35 @@
             height: 710px !important;
             margin: 10px auto;
             position: relative;
-            background-image: url('/EidCard/media/moaydanologo.png');
-            background-size:contain;
+            background-image: url('/EidCard/media/moayda.png');
+            background-size: contain;
             background-position: center;
+            background-repeat: no-repeat;
             color: #ffffff;
             display: none;
             align-items: center;
             justify-content: center;
             border: 1px solid gray;
-            background-repeat: no-repeat;
         }
 
         #name {
             position: absolute;
-            top: 60%;
-            /* عدل المكان حسب تصميمك */
+            top: 56%;
             width: 100%;
-            font-size: 34px;
-            font-weight: bold;
+            font-size: 22px;
             color: #C79C76;
         }
 
         input {
-            width: 90%;
+            width: 80%;
             max-width: 600px;
             padding: 10px;
-            font-size: 16px;
+            font-size: 18px;
             margin: 5px auto;
-            display: block;
             border-radius: 6px;
             border: 1px solid #ccc;
+            display: block;
+            text-align: center;
         }
 
         button {
@@ -66,32 +64,32 @@
             padding: 10px;
             font-size: 18px;
             margin: 5px auto;
-            display: block;
             border-radius: 6px;
-            border: 1px solid #ccc;
             background-color: #C79C76;
-            color: black;
-
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: block;
         }
 
         .header-logos {
             display: flex;
             justify-content: space-between;
-            /* لوضع كل شعار على الطرف */
             align-items: center;
-            /* محاذاة عامودية في المنتصف */
             width: 100%;
             max-width: 600px;
-            /* نفس عرض البطاقة لتناسق التصميم */
             margin: 0 auto;
-            /* توسيط الشعارين في الصفحة */
         }
 
         .logo {
             width: 100px;
-            /* يمكنك تعديل العرض حسب رغبتك */
             height: auto;
             padding: 10px;
+        }
+
+        .checkbox-container {
+            margin: 15px auto;
+            text-align: center;
         }
     </style>
 </head>
@@ -99,24 +97,29 @@
 <body>
     <div class="header-logos">
         <img class="logo" src="/EidCard/media/شعار فالك مفرغ 2@2x-8.PNG" alt="logo1">
+        <!-- يمكنك وضع شعار ثاني هنا اذا تحتاجه -->
     </div>
-
 
     <div id="card">
         <div id="name">اسمك هنا</div>
     </div>
 
     <input type="text" id="inputName" placeholder="أدخل اسمك هنا">
-    <button onclick="generateCard()">عرض البطاقة</button>
-    <button onclick="downloadCard()">تحميل البطاقة</button>
-    <div>
-        <a href="nologo.html" class="button">التصميم بدون شعار الشركة</a>
+
+    <div class="checkbox-container">
+        <input type="checkbox" id="showLogo" checked>
+        <label for="showLogo">عرض شعار الشركة على التصميم</label>
     </div>
 
+    <button onclick="generateCard()">عرض البطاقة</button>
+    <button onclick="downloadCard()">تحميل البطاقة</button>
+
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
     <script>
         function generateCard() {
             let name = document.getElementById("inputName").value;
+            let showLogo = document.getElementById("showLogo").checked;
 
             if (name.trim() === "") {
                 alert("من فضلك أدخل اسمك قبل عرض البطاقة!");
@@ -125,26 +128,29 @@
 
             document.getElementById("name").innerText = name;
 
-            // هنا يتم إظهار البطاقة
-            document.getElementById("card").style.display = "flex";
+            //تغيير الخلفية حسب الاختيار
+            let card = document.getElementById("card");
+            if (showLogo) {
+                card.style.backgroundImage = "url('/EidCard/media/moayda.png')";  // تصميم مع شعارك
+            } else {
+                card.style.backgroundImage = "url('/EidCard/media/moaydanologo.png')";  // تصميم بدون شعار
+            }
+
+            card.style.display = "flex";
         }
 
         function downloadCard() {
             let card = document.getElementById("card");
-
-            // التأكد من عرض البطاقة قبل تحميلها
             if (card.style.display !== "flex") {
                 alert("يرجى عرض البطاقة أولاً قبل التحميل.");
                 return;
             }
-
+            
             html2canvas(card).then(function (canvas) {
                 let link = document.createElement("a");
-                document.body.appendChild(link);
                 link.download = "بطاقة_معايدة.png";
                 link.href = canvas.toDataURL("image/png");
                 link.click();
-                document.body.removeChild(link);
             });
         }
     </script>
