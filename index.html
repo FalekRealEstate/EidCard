@@ -188,19 +188,22 @@
         }
 
         function downloadCard() {
-            let card = document.getElementById("card");
-            if (card.style.display !== "flex") {
-                alert("يرجى عرض البطاقة أولاً قبل التحميل.");
-                return;
-            }
-            
-            html2canvas(card).then(function (canvas) {
-                let link = document.createElement("a");
-                link.download = "بطاقة_معايدة.png";
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            });
-        }
+    let card = document.getElementById("card");
+    if (card.style.display !== "flex") {
+        alert("يرجى عرض البطاقة أولاً قبل التحميل.");
+        return;
+    }
+    
+    html2canvas(card, {
+        scale: 3, // زود الرقم كلما احتجت لدقة أعلى (الافتراضي 1)، 2 أو 3 مناسب جداً
+        useCORS: true // التأكد من السماح بأخذ الصور إذا كانت على سيرفر آخر
+    }).then(function (canvas) {
+        let link = document.createElement("a");
+        link.download = "بطاقة_معايدة.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
     </script>
 
 </body>
